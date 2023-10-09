@@ -1,0 +1,98 @@
+/* decoupages des sections avec grid layout */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1d2634;
+  color: #9e9ea4;
+  font-family: 'Times New Roman',
+    Times,
+    serif;
+}
+
+
+.grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 260px 1fr 1fr 1fr;
+  grid-template-rows: 0.2fr 3fr 0.2fr;
+  grid-template-areas:
+    'sidebar header header header'
+    'sidebar main main main'
+    'sidebar footer footer footer';
+}
+
+
+/* entete de toutes les pages */
+.main-container {
+  grid-area: main;
+  overflow: auto;
+  padding: 20px 20px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+
+.main-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.main-title h1 {
+  border-left: 5px solid;
+  border-image: linear-gradient(180deg, #2962ff 10%, #ff6d00 30%, #2e7d32 70%, #d50000 50%)1;
+  padding-left: 10px;
+  margin-bottom: 30px;
+}
+
+/* ==================================== Gestion formulaire(input, form, label) ==============================> */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+.design-input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 9px;
+  border: 1px solid #2962ff;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+
+.design-input:focus {
+  border-color: #ff6d00;
+  border-width: 2px;
+  outline: none;
+}
+
+/* =======================================Design Button============================================> */
+.design-button, .danger-button {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin-left: 6px;
+}
+
+.design-button {
+  background-color: #2962ff; 
+}
+
+.danger-button {
+  background-color: #d50000;
+  
+}
+
+/* .design-button:a {
+  background-color: #ff6d00;
+} */

@@ -1,0 +1,180 @@
+.main-sell {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.sell form {
+    box-shadow: 1px 1px 2px 1px #000000;
+    width: 500px;
+    padding: 15px;
+    height: 67vh;
+}
+
+.item-sell input {
+    width: 220px;
+}
+
+.sell form .item-sell {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.statistic-item-sell {
+    box-shadow: 1px 1px 2px 1px #000000;
+    width: 700px;
+    height: 67vh;
+}
+
+
+.main-barre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 7vh;
+}
+
+.line {
+    border-top: 1px solid white;
+    width: 50%;
+    margin: 0 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* margin: 3px 0; */
+}
+
+th,
+td {
+    padding: 7px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #2962ff;
+}
+
+tr:hover {
+    background-color: #596a98;
+}
+
+tfoot {
+    font-weight: bold;
+    color: #2962ff;
+}
+
+tfoot:hover {
+    font-weight: bold;
+    color: #f1eded;
+    ;
+}
+
+.main-cart {
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+
+/* Style de la barre de défilement (utilisable dans certains navigateurs) */
+.main-cart::-webkit-scrollbar {
+    width: 8px;
+    /* Largeur de la barre de défilement */
+}
+
+/* Couleur du pouce de la barre de défilement */
+.main-cart::-webkit-scrollbar-thumb {
+    background-color: #9e9ea4;
+}
+
+/* Couleur de la piste de la barre de défilement */
+.main-cart::-webkit-scrollbar-track {
+    background-color: #9e9ea4;
+}
+
+/* =============================Style du tableau d'entête */
+
+.statistic-item-sell {
+    padding: 15px;
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.statistic-item-sell h3{
+    font-weight: bold;
+    padding: 15px;
+}
+
+/* Style de la barre de défilement (utilisable dans certains navigateurs) */
+.statistic-item-sell::-webkit-scrollbar {
+    width: 8px;
+    /* Largeur de la barre de défilement */
+}
+
+/* Couleur du pouce de la barre de défilement */
+.statistic-item-sell::-webkit-scrollbar-thumb {
+    background-color: #9e9ea4;
+}
+
+/* Couleur de la piste de la barre de défilement */
+.statistic-item-sell::-webkit-scrollbar-track {
+    background-color: #9e9ea4;
+}
+
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.cart-table th,
+.cart-table td {
+    border: 1px solid #ccc;
+    padding: 7px;
+    text-align: center;
+}
+
+.cart-table th {
+    background-color: #2962ff;
+    font-weight: bold;
+}
+
+/* Style de la liste d'articles */
+.cart-list {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-list .item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cart-list .item-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.cart-list .item-price {
+    flex: 0 0 30%;
+    text-align: right;
+}
+
+/* Style du total par catégorie */
+.total-category {
+    font-weight: bold;
+    color: #ff5733;
+    /* Couleur de texte rouge */
+}
