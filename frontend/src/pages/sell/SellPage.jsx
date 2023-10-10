@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Http from 'axios';
 import './sell.css';
 import { BsFillCartFill, BsFileBarGraphFill } from 'react-icons/bs';
 // import PicCaisier from '../images/pic.jpg';
 
 
 function SellPage() {
+
+  const [dataSell, setDataSell] = useState({
+    barreCode: '',
+    qnt: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataSell({ ...dataSell, [name]: value });
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await Http.post('/product/create', dataSell);
+  
+      if (response.status === 200) {
+        console.log('Données envoyées avec succès !');
+        // réinitialiser les données du formulaire
+        setDataSell({
+          barreCode: '',
+          qnt: ''
+        });
+      } else {
+        console.error('Erreur lors de l\'envoi des données.');
+      }
+    } catch (error) {
+      console.error('Une erreur s\'est produite lors de l\'envoi des données :', error);
+    }
+  };
+  
+
   return (
     <main className="main-container">
       <div className="main-title">
@@ -13,13 +47,26 @@ function SellPage() {
 
       <section className='main-sell'>
         <div className="sell">
-          <form action="">
+          <form onSubmit={handleSubmit}>
             <div className="item-sell">
-              <input type="text" name="" id="" className='design-input' placeholder='Code Barre' />
-              <input type="number" name="" id="" className='design-input' placeholder='Quantité' />
+              <input
+                type="text"
+                name="barreCode"
+                className='design-input'
+                placeholder='Code Barre'
+                value={dataSell.barreCode}
+                onChange={handleChange} />
+
+              <input
+                type="number"
+                name="qnt"
+                className='design-input'
+                placeholder='Quantité'
+                value={dataSell.qnt}
+                onChange={handleChange} />
             </div>
             <div className="buttons-sell">
-              <button className='design-button' >Valider</button>
+              <button className='design-button' type='submit' >Valider</button>
               <button className='danger-button'>Vider</button>
             </div>
 

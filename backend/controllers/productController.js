@@ -1,58 +1,83 @@
-const { Product } = require('../models/productModel');
+const Product = require('../models/productModel');
 
 // Données factices pour simuler une base de données
 const products = [];
 
-// Opération Create
-function createProduct(req, res) {
-  const { barreCode, price, qnt, category } = req.body;
-  const id = articles.length + 1;
-  const newProduct = new Product(id, barreCode, price, qnt, category);
-  products.push(newProduct);
-  res.status(201).json(newProduct);
+// Opération Create (Insérer un nouveau produit)
+async function createProduct(req, res) {
+  try {
+    const { barreCode, price, qnt, category } = req.body;
+
+    const newProduct = new Product({ barreCode, price, qnt, category });
+
+    const savedProduct = await newProduct.save();
+
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating product' });
+  }
 }
 
 // Opération Read (lire tous les produits)
-function getAllProducts(req, res) {
-  res.json(products);
+async function getAllProducts(req, res) {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching products' });
+  }
 }
 
-// Opération Read (lire un article par ID)
-function getProductById(req, res) {
-  const id = parseInt(req.params.id);
-  const product = products.find((p) => p.id === id);
-  if (!product) {
-    res.status(404).json({ error: 'Product not found' });
-  } else {
-    res.json(product);
+// Opération Read (lire un produit par ID)
+async function getProductById(req, res) {
+  try {
+    const id = req.params.id;
+    const product = await Product.findById(id);
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+    } else {
+      res.json(product);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching product' });
   }
 }
 
 // Opération Update
-function updateProduct(req, res) {
-  const id = parseInt(req.params.id);
-  const { barreCode, price, qnt, category } = req.body;
-  const product = products.find((p) => p.id === id);
-  if (!product) {
-    res.status(404).json({ error: 'Product not found' });
-  } else {
-    product.barreCode = barreCode;
-    product.price = price;
-    product.qnt = qnt;
-    product.category = category;
-    res.json(product);
+async function updateProduct(req, res) {
+  try {
+    const id = req.params.id;
+    const { barreCode, price, qnt, category } = req.body;
+
+    // Recherchez le produit par ID et mettez à jour les champs
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { barreCode, price, qnt, category },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      res.status(404).json({ error: 'Product not found' });
+    } else {
+      res.json(updatedProduct);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error updating product' });
   }
 }
 
 // Opération Delete
-function deleteProduct(req, res) {
-  const id = parseInt(req.params.id);
-  const index = products.findIndex((p) => p.id === id);
-  if (index === -1) {
-    res.status(404).json({ error: 'Product not found' });
-  } else {
-    products.splice(index, 1);
-    res.json({ message: 'Product deleted successfully' });
+async function deleteProduct(req, res) {
+  try {
+    const id = req.params.id;
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    if (!deletedProduct) {
+      res.status(404).json({ error: 'Product not found' });
+    } else {
+      res.json({ message: 'Product deleted successfully' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error deleting product' });
   }
 }
 

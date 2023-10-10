@@ -1,11 +1,14 @@
-class Product {
-  constructor(id, barreCode, price, qnt, category) {
-    this.id = id;
-    this.barreCode = barreCode;
-    this.price = price;
-    this.qnt = qnt;
-    this.category = category;
-  }
-}
+const mongoose = require('mongoose');
+
+// Schéma de modèle pour le produit
+const productSchema = new mongoose.Schema({
+  barreCode: String,
+  price: Number,
+  qnt: Number,
+  category: String,
+});
+
+// Modèle de produit basé sur le schéma
+const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;
