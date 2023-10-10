@@ -81,10 +81,16 @@ async function deleteProduct(req, res) {
   }
 }
 
+async function testApi(req,res){
+  res.send('Test 1, 2, 3 ....');
+}
+//test api route 
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  testApi,
 };
