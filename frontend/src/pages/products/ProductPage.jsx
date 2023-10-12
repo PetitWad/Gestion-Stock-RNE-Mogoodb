@@ -1,4 +1,6 @@
 import { React, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Outlet, Link } from 'react-router-dom';
 import './productPage.css';
 import Alter from '../images/alter.png';
@@ -19,35 +21,43 @@ function ProductPage() {
         setFormData({ ...formData, [name]: value });
     };
 
-    console.log(formData)
-
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Créez un objet de configuration pour la requête POST
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData), // Convertissez les données en JSON
+            body: JSON.stringify(formData),
         };
 
-        // Effectuer la requête POST
-        fetch('http://localhost:3000/product/create', requestOptions)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Échec de la requête réseau');
-                }
-                return response.json(); // Si la réponse est en JSON
-            })
-            .then((data) => {
-                // Traitez la réponse du serveur si nécessaire
-                console.log(data);
-            })
-            .catch((error) => {
-                // Gestion des erreurs en cas d'échec de la requête
-                console.error(error);
-            });
+        try {
+            const response = await fetch('http://localhost:8000/product/create', requestOptions);
+
+            if (response.ok) {
+                 await response.json();
+
+                 // Afficher un toast de succès
+                 toast.success('Données enregistrées avec succès!');
+
+                // Réinitialiser les champs du formulaire
+                setFormData({
+                    barreCode: '',
+                    price: '',
+                    qnt: '',
+                    category: '',
+                });
+
+            } else {
+                // Afficher une notification d'erreur
+                 toast.error('Erreur lors de l\'insertion des données depuis l\'API.', {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
+        } catch (error) {
+            // Afficher une notification d'erreur
+            toast.error('Une erreur s\'est produite lors de la récupération des données depuis l\'API :', error);
+            console.error('Une erreur s\'est produite lors de la récupération des données depuis l\'API :', error);
+        }
     };
 
     return (
@@ -77,22 +87,22 @@ function ProductPage() {
                     <form onSubmit={handleSubmit}>
                         <div className='item-input'>
                             <FaBarcode className='icon-input' />
-                            <input type="text" name='barreCode' className='design-input' placeholder="Barre code"
+                            <input type="text" name='barreCode' className='design-input' placeholder="Barre code" required
                                 value={formData.barreCode} onChange={handleChange} />
                         </div>
                         <div className='item-input'>
                             <BsTagsFill className='icon-input' />
-                            <input type="number" name='price' className='design-input' placeholder='Prix produit'
+                            <input type="number" name='price' className='design-input' placeholder='Prix produit' required
                                 value={formData.price} onChange={handleChange} />
                         </div>
                         <div className='item-input'>
                             <BsFillBasketFill className='icon-input' />
-                            <input type="number" name='qnt' className='design-input' placeholder='Quantité'
+                            <input type="number" name='qnt' className='design-input' placeholder='Quantité' required
                                 value={formData.qnt} onChange={handleChange} />
                         </div>
                         <div className='item-input'>
                             <BsFillGrid3X3GapFill className='icon-input' />
-                            <select name="category" id="" className='design-input'
+                            <select name="category" className='design-input' required
                                 value={formData.category} onChange={handleChange} >
                                 <option>&nbsp;&nbsp; Choix catégorie</option>
                                 <option value="Articles de sport">&nbsp;&nbsp;&nbsp;Articles de sport </option>
@@ -111,8 +121,10 @@ function ProductPage() {
                     </div>
                 </div>
             </section >
+            <ToastContainer />
         </main >
     )
 }
 
 export default ProductPage
+   

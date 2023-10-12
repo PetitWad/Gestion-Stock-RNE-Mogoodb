@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Http from 'axios';
+import React, { useState, useEffect } from 'react';
 import './sell.css';
 import { BsFillCartFill, BsFileBarGraphFill } from 'react-icons/bs';
 // import PicCaisier from '../images/pic.jpg';
@@ -7,28 +6,39 @@ import { BsFillCartFill, BsFileBarGraphFill } from 'react-icons/bs';
 
 function SellPage() {
 
+  //decomposition des dvariable pour recuperer des donnees depuis mon formulaire
   const [dataSell, setDataSell] = useState({
     barreCode: '',
     qnt: ''
   });
 
+  //Variable de gestion des donnes a afficher
+  const [product, setProduct] = useState([]);
+
+  //Chargement de donner des input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDataSell({ ...dataSell, [name]: value });
   }
 
+  //function de soumission des donnees vers Mongodb
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const response = await Http.post('/product/create', dataSell);
-  
-      if (response.status === 200) {
+      const response = await fetch('/product/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataSell),
+      });
+
+      if (response.ok) {
         console.log('Données envoyées avec succès !');
-        // réinitialiser les données du formulaire
         setDataSell({
           barreCode: '',
-          qnt: ''
+          qnt: '',
         });
       } else {
         console.error('Erreur lors de l\'envoi des données.');
@@ -37,7 +47,28 @@ function SellPage() {
       console.error('Une erreur s\'est produite lors de l\'envoi des données :', error);
     }
   };
-  
+
+  //Afficher tous les produit disponible depuis la bd mongodb
+  useEffect(() => {
+    const fetchAllProduct = async () => {
+
+      try {
+        const response = await fetch('http://localhost:8000/product/all');
+
+        if (response.ok) {
+        const data = await response.json();
+          setProduct(data);
+
+        } else {
+          console.error('Erreur lors de la récupération des données depuis l\'API.');
+        }
+      } catch (error) {
+        console.error('Une erreur s\'est produite lors de la récupération des données depuis l\'API :', error);
+      }
+    };
+    fetchAllProduct();
+  }, []);
+
 
   return (
     <main className="main-container">
@@ -87,12 +118,6 @@ function SellPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>iPhone 13 Pro</td>
-                    <td>2</td>
-                    <td>$999.99</td>
-                    <td>$1999.98</td>
-                  </tr>
                   <tr>
                     <td>Samsung Galaxy S21</td>
                     <td>3</td>
@@ -148,7 +173,7 @@ function SellPage() {
             </div>
           </form>
         </div>
-
+        {/* Le tableau des produits */}
         <div className="statistic-item-sell">
           <h3><BsFileBarGraphFill /> Rapport de vente par catégorie</h3>
           <table class="cart-table">
@@ -161,91 +186,14 @@ function SellPage() {
               </tr>
             </thead>
             <tbody>
-              <tr class="item">
-                <td>123456</td>
-                <td>Smartphones</td>
-                <td>200</td>
-                <td class="total-category">0.00</td>
-              </tr>
-              <tr class="item">
-                <td>789012</td>
-                <td>Ordinateurs</td>
-                <td>390</td>
-                <td class="total-category">0.00</td>
-              </tr>
-              <tr class="item">
-                <td>123456</td>
-                <td>Smartphones</td>
-                <td>250</td>
-                <td class="total-category">1200.00</td>
-              </tr>
-              <tr class="item">
-                <td>789012</td>
-                <td>Ordinateurs</td>
-                <td>390</td>
-                <td class="total-category">2500.00</td>
-              </tr>
-              <tr class="item">
-                <td>345678</td>
-                <td>Tablettes</td>
-                <td>150</td>
-                <td class="total-category">800.00</td>
-              </tr>
-              <tr class="item">
-                <td>901234</td>
-                <td>Imprimantes</td>
-                <td>75</td>
-                <td class="total-category">350.00</td>
-              </tr>
-              <tr class="item">
-                <td>567890</td>
-                <td>Écrans</td>
-                <td>200</td>
-                <td class="total-category">1800.00</td>
-              </tr>
-              <tr class="item">
-                <td>234567</td>
-                <td>Claviers</td>
-                <td>120</td>
-                <td class="total-category">500.00</td>
-              </tr>
-              <tr class="item">
-                <td>890123</td>
-                <td>Souris</td>
-                <td>180</td>
-                <td class="total-category">900.00</td>
-              </tr>
-              <tr class="item">
-                <td>456789</td>
-                <td>Casques</td>
-                <td>90</td>
-                <td class="total-category">750.00</td>
-              </tr>
-              <tr class="item">
-                <td>123456</td>
-                <td>Disques durs</td>
-                <td>110</td>
-                <td class="total-category">600.00</td>
-              </tr>
-              <tr class="item">
-                <td>789012</td>
-                <td>Écouteurs</td>
-                <td>300</td>
-                <td class="total-category">1200.00</td>
-              </tr>
-              <tr class="item">
-                <td>345678</td>
-                <td>Routeurs</td>
-                <td>80</td>
-                <td class="total-category">400.00</td>
-              </tr>
-              <tr class="item">
-                <td>901234</td>
-                <td>Webcams</td>
-                <td>40</td>
-                <td class="total-category">200.00</td>
-              </tr>
-
+              {product.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.barreCode}</td>
+                  <td>{item.price} $</td>
+                  <td>{item.qnt}</td>
+                  <td>{item.category}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

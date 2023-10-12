@@ -1,5 +1,6 @@
 const express= require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 
 
@@ -7,6 +8,7 @@ const app = express()
 const port = 8000;
 
 app.use(express.json());
+app.use(cors());
 
 // connection avec la base de donnees mongoose
 mongoose.connect('mongodb://127.0.0.1:27017/db_ReactNode', {

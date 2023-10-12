@@ -39,7 +39,7 @@ async function getProductById(req, res) {
       res.json(product);
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching product' });
+    res.status(500).json({ error: 'Error fetching product...' });
   }
 }
 
